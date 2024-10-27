@@ -1,0 +1,7 @@
+---
+- include_tasks: package.yaml
+- include_tasks: user.yaml
+- include_tasks: prepare.yaml
+- include_tasks: systemd.yaml
+- include_tasks: service.yaml
+

@@ -1,0 +1,5 @@
+---
+- name: install java
+  yum:
+      name: java-17-amazon-corretto
+      state: present

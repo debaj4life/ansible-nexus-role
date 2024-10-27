@@ -1,0 +1,52 @@
+- name: create directory 
+  file: 
+      path: "{{ nexus_dir }}"
+      state: directory
+      mode: 0775
+
+- name: create sonar type directory
+  file:
+     path: "{{ sonar_type_dir }}"
+     state: directory
+     mode: 0755
+
+- name: download the nexus packages
+  unarchive:
+      src: "{{ nexus_url }}"
+      dest: "{{ nexus_dir }}"
+      remote_src: yes
+
+- name: rename extract file to nexus
+  shell:
+    cmd: mv /opt/nexus-3* /opt/nexus
+
+- name: change the ownership of nexus file
+  file:
+      path: "{{ nexus_dir }}"
+      owner: "{{ nexus_user }}"
+      group: "{{ nexus_group }}"
+      mode: "u+rwx,g+rx,o=rx"
+      recurse: yes
+      state: directory
+  
+- name: change the ownership of sonar file
+  file:
+      path: "{{ sonar_type_dir }}"
+      owner: "{{ nexus_user }}"
+      group: "{{ nexus_group }}"
+      mode: "u+rwx,g+rx,o=rx"
+      recurse: yes
+      state: directory
+
+- name: create symbolic links to /etc/init.d/nexus
+  file: 
+      src: "{{ nexus_service_loc }}"
+      dest: /etc/init.d/nexus 
+      state: link
+      force: yes
+    
+- name: uncomment the run as user fron nexus file
+  lineinfile:
+      path: "{{ nexus_rc_file }}"
+      regexp: '^#?run_as_user='
+      line: 'run_as_user="nexus"'

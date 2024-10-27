@@ -1,0 +1,10 @@
+- name: add nexus groupname
+  group:
+      name: "{{nexus_group}}"
+  
+- name: add nexus username
+  user:
+      name: "{{ nexus_user }}"
+      group: "{{ nexus_group }}"
+      home: /usr/share/nexus
+      createhome: yes
